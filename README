@@ -1,0 +1,17 @@
+Note: this is version 0.0.1 of this module and currently does not run.
+
+This python module is for the rendering of a simulated 3D world by raytracing.
+The dependencies for this module are outlined at the bottom of this readme.
+
+Use of this module flows as follows. Instantiate one or many 3D objects that
+are children of the included 'Body' class (the body class is filled with
+virtual members providing a common interface for its children and is easily
+extended). Instantiate a 'World' object and feed it the bodies instantiated
+above with the 'add_body()' method. Setup a lightsource direction, a color for
+the sky, a point-of-view position, direction, and orientation, and a field of
+view center, width, and height. Finally use the 'render()' method of your
+'World' object to render the image.
+
+DEPENDENCIES:
+    pypng -- for creation of output image.
+    pybin -- dependency of pypng
