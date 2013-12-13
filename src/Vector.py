@@ -1,21 +1,29 @@
 from rand import rand
+import bounds
 
 class Vector:
     """This handles vector math and manipulation."""
     x = 0.0
     y = 0.0
     z = 0.0
-    l = 0.0
+#    l = 0.0
+    
+    def dot(self, vector):
+        """Calculate dot product of this vector and another."""
+        return self.x * vector.x + self.y * vector.y + self.z * vector.z
     
     def length(self):
         """Calculates vector length."""
-        self.l = (self.x ** 2 + self.y ** 2 + self.z ** 2) ** 0.5
+#        self.l = (self.x ** 2 + self.y ** 2 + self.z ** 2) ** 0.5
+#        return self
+        return self.dot(self) ** 0.5
+    
     def __init__(self, x = 0.0, y = 1.0, z = 0.0):
         """Initialize vector with x,y,z coordinates."""
         self.x = x
         self.y = y
         self.z = z
-        self.length()
+#        self.length()
     
     def __sub__(self, vector):
         """Overload '-' operator for vector differences."""
@@ -33,7 +41,7 @@ class Vector:
         self.x = vector.x
         self.y = vector.y
         self.z = vector.z
-        self.l = vector.l
+#        self.l = vector.l
         return self
     
     def add(self, vector, scalar = 1.0):
@@ -41,14 +49,14 @@ class Vector:
         self.x += vector.x * scalar
         self.y += vector.y * scalar
         self.z += vector.z * scalar
-        self.length()
+#        self.length()
         return self
     
     def scale(self, scalar):
         self.x *= scalar
         self.y *= scalar
         self.z *= scalar
-        self.l *= scalar
+#        self.l *= abs(scalar)
         return self
     
     def trans(self, x, y, z):
@@ -56,24 +64,20 @@ class Vector:
         self.x += x
         self.y += y
         self.z += z
-        self.length()
+#        self.length()
         return self
     
     def norm(self):
         """Normalize vector to length 1."""
-        self.length()
-        if abs(self.l) <  bounds.very_small:
+        l = self.length()
+        if abs(l) <  bounds.very_small:
             return self # why did you normalize a zero vector?
-        while abs(self.l - 1.0) > bounds.small:
+        while abs(l - 1.0) > bounds.small:
             self.x /= l
             self.y /= l
             self.z /= l
-            self.length()
+            l = self.length()
         return self
-    
-    def dot(self, vector):
-        """Calculate dot product of this vector and another."""
-        return self.x * vector.x + self.y * vector.y + self.z * vector.z
     
     def cross(self, vector):
         """Returns cross product of this vector by another."""
@@ -94,7 +98,7 @@ class Vector:
         dy *= d
         dz *= d
         self.trans(dx,dy,dz)
-        
+        return self
     
     def p(self):
         return "[{0},{1}.{2}]".format(self.x, self.y, self.z)

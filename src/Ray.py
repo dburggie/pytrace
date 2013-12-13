@@ -6,7 +6,7 @@ class Ray:
     o = Vector(0.0,0.0,0.0)
     d = Vector(0.0,1.0,0.0)
     
-    def __init__(self, o = Vector(0.0,0.0,0.0), d = Vector(0.0,1.0,0.0):
+    def __init__(self, o = Vector(0.0,0.0,0.0), d = Vector(0.0,1.0,0.0)):
         self.o = o
         self.d = d
     
