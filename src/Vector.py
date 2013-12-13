@@ -6,7 +6,6 @@ class Vector:
     x = 0.0
     y = 0.0
     z = 0.0
-#    l = 0.0
     
     def dot(self, vector):
         """Calculate dot product of this vector and another."""
@@ -14,8 +13,6 @@ class Vector:
     
     def length(self):
         """Calculates vector length."""
-#        self.l = (self.x ** 2 + self.y ** 2 + self.z ** 2) ** 0.5
-#        return self
         return self.dot(self) ** 0.5
     
     def __init__(self, x = 0.0, y = 1.0, z = 0.0):
@@ -23,7 +20,6 @@ class Vector:
         self.x = x
         self.y = y
         self.z = z
-#        self.length()
     
     def __sub__(self, vector):
         """Overload '-' operator for vector differences."""
@@ -33,6 +29,14 @@ class Vector:
                 self.z - vector.z
                 )
     
+    def __eq__(self, v):
+        """Overload '=' operator for vector equality."""
+        # treat the vectors as equal if they are very close together
+        if (self - v).length() < bounds.very_small:
+            return True
+        else:
+            return False
+    
     def dup(self):
         """Create copy of vector."""
         return Vector(self.x, self.y, self.z)
@@ -41,7 +45,6 @@ class Vector:
         self.x = vector.x
         self.y = vector.y
         self.z = vector.z
-#        self.l = vector.l
         return self
     
     def add(self, vector, scalar = 1.0):
@@ -49,14 +52,12 @@ class Vector:
         self.x += vector.x * scalar
         self.y += vector.y * scalar
         self.z += vector.z * scalar
-#        self.length()
         return self
     
     def scale(self, scalar):
         self.x *= scalar
         self.y *= scalar
         self.z *= scalar
-#        self.l *= abs(scalar)
         return self
     
     def trans(self, x, y, z):
@@ -64,7 +65,6 @@ class Vector:
         self.x += x
         self.y += y
         self.z += z
-#        self.length()
         return self
     
     def norm(self):

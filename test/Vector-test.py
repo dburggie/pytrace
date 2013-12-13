@@ -26,6 +26,16 @@ if abs( w.length() - (8 ** 0.5) ) > d:
     print "__sub__ method: incorrect length."
 del u,v,w,x
 
+# test __eq__() method
+u = Vector()
+v = u.dup()
+if not u == v:
+    print "__eq__() method: not evaluating true correctly"
+v.trans(1.0,1.0,1.0)
+if u == v:
+    print "__eq__() method: not evaluating false correctly"
+del u,v
+
 # test dup() method
 u = Vector(1.0,2.0,3.0)
 v = u.dup()
