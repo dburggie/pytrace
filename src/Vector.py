@@ -7,12 +7,15 @@ class Vector:
     z = 0.0
     l = 0.0
     
+    def length(self):
+        """Calculates vector length."""
+        self.l = (self.x ** 2 + self.y ** 2 + self.z ** 2) ** 0.5
     def __init__(self, x = 0.0, y = 1.0, z = 0.0):
         """Initialize vector with x,y,z coordinates."""
         self.x = x
         self.y = y
         self.z = z
-        self.l = (self.x ** 2 + self.y ** 2 + self.z ** 2) ** 0.5
+        self.length()
     
     def __sub__(self, vector):
         """Overload '-' operator for vector differences."""
@@ -30,6 +33,7 @@ class Vector:
         self.x = vector.x
         self.y = vector.y
         self.z = vector.z
+        self.l = vector.l
         return self
     
     def add(self, vector, scalar = 1.0):
@@ -37,12 +41,14 @@ class Vector:
         self.x += vector.x * scalar
         self.y += vector.y * scalar
         self.z += vector.z * scalar
+        self.length()
         return self
     
     def scale(self, scalar):
         self.x *= scalar
         self.y *= scalar
         self.z *= scalar
+        self.l *= scalar
         return self
     
     def trans(self, x, y, z):
@@ -50,15 +56,19 @@ class Vector:
         self.x += x
         self.y += y
         self.z += z
+        self.length()
         return self
     
     def norm(self):
         """Normalize vector to length 1."""
-        l = (self.x ** 2 + self.y ** 2 + self.z ** 2) ** 0.5
-        if l != 0.0:
+        self.length()
+        if abs(self.l) <  bounds.very_small:
+            return self # why did you normalize a zero vector?
+        while abs(self.l - 1.0) > bounds.small:
             self.x /= l
             self.y /= l
             self.z /= l
+            self.length()
         return self
     
     def dot(self, vector):

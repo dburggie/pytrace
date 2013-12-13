@@ -6,8 +6,8 @@
 *.b
 *~
 
-# omit test directory
-test/
+# omit notes directory
+notes
 
 # omit code generating tools
 tool*.py

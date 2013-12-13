@@ -1,5 +1,5 @@
 from Color import Color
-from png import Png
+from pypng import Png
 
 class Image(Png):
     
