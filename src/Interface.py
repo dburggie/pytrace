@@ -59,17 +59,17 @@ class Interface:
     
     def register_hit(self, ray):
         if self._body != None and self._distance > 0.0:
-            self._poi = ray.follow(self.distance)
+            self._poi = ray.follow(self._distance)
             self._normal = self._body.normal(self._poi)
             self._color = self._body.get_color(self._poi)
-            print "registered a hit at distance", self.distance
-            print "    hit details:"
-            print "        poi:    ", self.poi.p()
-            print "        normal: ", self.normal.p()
-            print "        color:  ", self.color.p()
-            print "        body:   ", self.body.p()
-        else:
-            print "no hit registered: hit the sky."
+#            print "registered a hit at distance", self._distance
+#            print "    hit details:"
+#            print "        poi:    ", self._poi.p()
+#            print "        normal: ", self._normal.p()
+#            print "        color:  ", self._color.p()
+#            print "        body:   ", self._body.p()
+#        else:
+#            print "no hit registered: hit the sky."
         return self
     
     
