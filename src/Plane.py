@@ -5,35 +5,45 @@ from Body import Body
 from Interface import Interface
 
 class Plane(Body):
-    n = Vector(0.0,1.0,0.0)
-    o = Vector()
-    c = [0.05,0.05,0.05]
+    _normal = Vector(0.0,1.0,0.0)
+    _origin = Vector()
+    _color = [0.05,0.05,0.05]
     
     def __init__(self, normal, origin, color = [0.001,0.001,0.001]):
-        self.n = normal
-        self.o = origin
-        self.c = color
+        self._normal = normal.norm()
+        self._origin = origin
+        self._color = color
     
     def p(self):
+        """Returns the name of the type of body this is."""
         return 'Plane'
     
     def get_color(self, point):
-        return self.c.dup()
+        """Returns color of body at given point."""
+        return self._color.dup()
     
     def normal(self, point):
-        return self.n.dup()
+        """Returns normal vector of body at given point."""
+        return self._normal.dup()
     
+    def reflectivity(self, point):
+        """Returns percentage of brightness due to specular reflection."""
+        return 0.0
+    
+    # intersection of a ray with a plane is pretty easy:
+    #  * first, find the projection of ray direction onto the normal
+    #      * this is the portion of the velocity on the shortest path to plane
+    #  * divide the length of the shortest vector from plane to ray origin
+    #            by the length of the projection vector above
+    #      * get this vector by projecting ray origin minus plane origin onto
+    #                the plane normal
+    #  * now you have the distance along the ray to the point of intersection!
+    #      * this distance might be negative. Take this into account.
     def intersection(self, ray):
-        """Returns positive distance to target."""
-        cosine = self.n.dot(ray.d)
-        if cosine < bounds.too_small:
+        """Returns positive distance to target (or negative if no hit)."""
+        s = self._origin - ray.o
+        if s.dot(ray.d) < 0:
+            # this means ray is going away from plane
             return -1.0
-        # find magnitudes of d and o projected onto n
-        # (o - p) dot n / d dot n
-        t = (ray.o.x - self.o.x) * self.n.x
-        t = t + (ray.o.y - self.o.y) * self.n.y
-        t = t + (ray.o.z - self.o.z) * self.n.z
-        if t < bounds.too_close or t > bounds.too_far:
-            return -1.0
-        return t / cosine
+        return abs(s.dot(self._normal) / self._normal.dot(ray.d))
         
