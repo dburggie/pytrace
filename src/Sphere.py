@@ -29,7 +29,7 @@ class Sphere(Body):
     
     def reflectivity(self, point):
         """Returns percentage of brightness due to specular reflection."""
-        return 0.9
+        return 0.2
     
     # Intersection of ray with a sphere boils down to the solutions to a 
     # quadratic vector equation.

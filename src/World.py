@@ -7,17 +7,16 @@ from Sphere import Sphere
 from Plane import Plane
 from Interface import Interface
 
-base_brightness = 0.2
-base_specularity = 0.5
 
 class World:
-    
+    """This class holds body/camera/view information and performs raytrace."""
     
     
     bodies = []
     sky = Color()
     interface = Interface()
     light = Vector().norm()
+    base_brightness = 0.2
     
     
     
@@ -26,6 +25,7 @@ class World:
         self.sky = sky
         self.light = light.norm()
         interface = Interface()
+        self.base_brightness = 0.2
     
     
     
@@ -45,7 +45,11 @@ class World:
         return self.sky.dup()
     
     def get_light(self):
-        return self.light
+        return self.light.dup()
+    
+    def set_base_brightness(self, b):
+        self.base_brightness = b
+        return self
     
     def trace(self, ray, last_hit = None):
         """Finds first interaction of a ray within the world."""
@@ -76,17 +80,16 @@ class World:
     
     def shade(self, interface):
         """Detects amount of illumination at point."""
-        # definitely make this better than a single hardcoded lightsource
-        ray = Ray( interface.poi, self.get_light() )
-        lambertian = (1.0 - base_specularity) * self.light.dot(interface.normal)
-        if lambertian < base_brightness:
-            return base_brightness
+        ray = Ray( interface._poi, self.get_light() )
+        lambertian = self.light.dot(interface._normal)
+        if lambertian < self.base_brightness:
+            return self.base_brightness
         for bodies in self.bodies:
             distance = bodies.intersection(ray)
             if distance < 0.0:
                 continue
-            if bodies != interface.body or distance > bounds.too_small:
-                lambertian = base_brightness
+            if bodies != interface._body or distance > bounds.too_small:
+                lambertian = self.base_brightness
                 break
         return lambertian
     
@@ -100,10 +103,10 @@ class World:
             return Color(0.001,0.001,0.001)
         
         # get a trace interface
-        i = self.trace(ray, last_hit).dup()
+        i = self.trace(ray, last_hit)
         
         # detect hitting the sky
-        if i.body == None:
+        if i._body == None:
             return self.get_sky()
         
         # handling color of pixel:
@@ -124,14 +127,14 @@ class World:
         #           if L < 0 or in shadow: L = B
         #           (1-S)*L*C + S*R
         
-        color = i.color.dup()
+        color = i._color.dup()
         
-#        sp = base_specularity
-#        dp = 1.0 - sp
-#        L = self.shade(i)
-#        color = i.color.dim(L).dim(dp)
-#        color = color + self.sample(ray.reflect(i), i.body, depth + 1).dim(sp)
-        return color
+        sp = i._body.reflectivity(i._poi)
+        dp = 1.0 - sp
+        L = self.shade(i)
+        color = i._color.dim(L).dim(dp)
+        return color + self.sample(ray.reflect(i._poi, i._normal), 
+                i._body, depth + 1).dim(sp)
     
     
     
