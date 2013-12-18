@@ -1,7 +1,6 @@
 
 # omit files by type
 *.pyc
-*.png
 *.pdf
 *.b
 *~
