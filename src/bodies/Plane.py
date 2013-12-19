@@ -1,8 +1,8 @@
-import bounds
-from Vector import Vector
-from Ray import Ray
-from Body import Body
-from Interface import Interface
+from raytrace.src import bounds
+from raytrace.src.Vector import Vector
+from raytrace.src.Ray import Ray
+from raytrace.src.Color import Color
+from raytrace.src.Body import Body
 
 class Plane(Body):
     _normal = Vector(0.0,1.0,0.0)

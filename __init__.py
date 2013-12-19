@@ -5,4 +5,5 @@ from src import Sphere
 from src import hmSphere
 from src import Ray
 from src import Vector
+from src import Sky
 from src import World

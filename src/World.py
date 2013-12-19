@@ -3,6 +3,7 @@ from Color import Color
 from Vector import Vector
 from Ray import Ray
 from Body import Body
+from Sky import Sky
 from Interface import Interface
 
 
@@ -18,10 +19,10 @@ class World:
     
     
     
-    def __init__(self, bodies = [], sky = Color(), light = Vector()):
+    def __init__(self, bodies = [], sky = Sky()):
         self.bodies = bodies
         self.sky = sky
-        self.light = light.norm()
+        self.light = sky.get_light()
         interface = Interface()
         self.base_brightness = 0.2
     
@@ -33,14 +34,14 @@ class World:
     
     
     
-    def set_sky(self, color):
-        self.sky = color
+    def set_sky(self, sky):
+        self.sky = sky
         return self
     
     
     
-    def get_sky(self):
-        return self.sky.dup()
+    def get_sky(self, ray):
+        return self.sky.get_color(ray)
     
     def get_light(self):
         return self.light.dup()
@@ -105,7 +106,7 @@ class World:
         
         # detect hitting the sky
         if i._body == None:
-            return self.get_sky()
+            return self.get_sky(ray)
         
         # handling color of pixel:
         #   we need to adjust the color based on:

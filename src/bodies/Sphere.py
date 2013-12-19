@@ -1,7 +1,8 @@
 from raytrace.src import bounds
-from raytrace import Vector
-from raytrace import Color
-from raytrace import Body
+from raytrace.src.Vector import Vector
+from raytrace.src.Ray import Ray
+from raytrace.src.Color import Color
+from raytrace.src.Body import Body
 
 class Sphere(Body):
     

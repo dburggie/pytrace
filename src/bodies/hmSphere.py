@@ -1,6 +1,9 @@
-from raytrace import Color
-from raytrace import Vector
-from raytrace import Sphere
+from raytrace.src import bounds
+from raytrace.src.Vector import Vector
+from raytrace.src.Ray import Ray
+from raytrace.src.Color import Color
+from raytrace.src.Body import Body
+from Sphere import Sphere
 
 class hmSphere(Sphere):
     """Half-mirrored sphere."""
@@ -10,6 +13,9 @@ class hmSphere(Sphere):
             orientation = Vector()):
         Sphere.__init__(self, center, radius, color)
         self.orientation = orientation.norm()
+    
+    def set_orientation(self, o):
+        self.orientation = o.norm()
     
     def reflectivity(self, point):
         if self.orientation.dot(point - self.center) > 0.0:

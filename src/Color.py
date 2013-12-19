@@ -1,5 +1,4 @@
-
-from raytrace.src import bounds
+import bounds
 
 class Color:
     r = 0.0
