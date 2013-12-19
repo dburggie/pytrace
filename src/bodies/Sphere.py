@@ -1,6 +1,7 @@
-import bounds
-from Vector import Vector
-from Body import Body
+from raytrace.src import bounds
+from raytrace import Vector
+from raytrace import Color
+from raytrace import Body
 
 class Sphere(Body):
     

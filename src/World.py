@@ -3,8 +3,6 @@ from Color import Color
 from Vector import Vector
 from Ray import Ray
 from Body import Body
-from Sphere import Sphere
-from Plane import Plane
 from Interface import Interface
 
 
