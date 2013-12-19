@@ -8,7 +8,7 @@ from raytrace import World
 from raytrace import Color
 from raytrace import Image
 
-filename = 'sample-03.png'
+filename = 'sample-06.png'
 width = 256
 height = width
 
@@ -22,12 +22,13 @@ p = Plane(Vector(0.0,1.0,0.0), Vector(0.0,0.0,0.0), Color(0.8,0.1,0.1))
 
 w = World()
 w.add_body(s)
+w.add_body(p)
 w.set_sky(Sky(Vector(1.0,10.0,1.0), Color(0.2,0.2,0.8)))
 
-camera = Vector(0.0,1.0,16.0)
+camera = Vector(0.0,0.8,16.0)
 c_dir = Vector(0.0,0.0,-1.0).norm()
 c_up = Vector(0.0,1.0,0.0).norm()
-c_origin = Vector(-1.5,2.5,0.0) - camera
+c_origin = Vector(-1.5,2.3,0.0) - camera
 c_width = 3.0
 c_height = 3.0
 c_x = c_dir.cross(c_up).scale(c_width / width)
@@ -37,10 +38,14 @@ ray = Ray()
 image = Image(width, height)
 
 for y in range(height):
+    print 'scanline', y, 'of', height,
     for x in range(width):
         ray.set_origin(camera.dup())
         ray.set_direction(c_origin.dup().add(c_x, x).add(c_y, y))
         image.set_pixel(x,y,w.sample(ray))
+    print 'done'
 
+print 'encoding...'
 image.toPNG().write(filename)
+print 'all done!'
         

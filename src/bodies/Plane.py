@@ -9,26 +9,43 @@ class Plane(Body):
     _origin = Vector()
     _color = [0.05,0.05,0.05]
     
-    def __init__(self, normal, origin, color = [0.001,0.001,0.001]):
-        self._normal = normal.norm()
-        self._origin = origin
-        self._color = color
-    
     def p(self):
         """Returns the name of the type of body this is."""
         return 'Plane'
+    
+    def set_position(self, p):
+        self._origin = p
+        return self
+    
+    def set_color(self, c):
+        self._color = c
+        return self
     
     def get_color(self, point):
         """Returns color of body at given point."""
         return self._color.dup()
     
+    def set_normal(self, n):
+        self._normal = n.norm()
+        return self
+    
     def normal(self, point):
         """Returns normal vector of body at given point."""
         return self._normal.dup()
     
+    def set_reflectivity(self, r):
+        self._r = r
+        return self
+    
     def reflectivity(self, point):
         """Returns percentage of brightness due to specular reflection."""
-        return 0.0
+        return self._r
+    
+    def __init__(self, normal, origin, color = [0.001,0.001,0.001]):
+        self.set_normal(normal)
+        self.set_position(origin)
+        self.set_color(color)
+        self.set_reflectivity(0.2)
     
     # intersection of a ray with a plane is pretty easy:
     #  * first, find the projection of ray direction onto the normal
@@ -41,9 +58,13 @@ class Plane(Body):
     #      * this distance might be negative. Take this into account.
     def intersection(self, ray):
         """Returns positive distance to target (or negative if no hit)."""
-        s = self._origin - ray.o
-        if s.dot(ray.d) < 0:
-            # this means ray is going away from plane
+        d_proj = self._normal.dot(ray.d)
+        if abs(d_proj) < bounds.too_small:
             return -1.0
-        return abs(s.dot(self._normal) / self._normal.dot(ray.d))
+        s_proj = (self._origin - ray.o).dot(self._normal)
+        if d_proj * s_proj < 0.0:
+            # ray going away from plane
+            return -1.0
+        else:
+            return s_proj / d_proj
         

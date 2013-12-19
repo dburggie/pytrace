@@ -11,15 +11,22 @@ class Sphere(Body):
     R = 0.0
     color = [0.01,0.01,0.01]
     
-    def __init__(self, center, radius, color):
-        self.center = center
-        self.radius = radius
-        self.R = radius ** 2
-        self.color = color
-    
     def p(self):
         """Returns the name of the type of body this is."""
         return 'Sphere'
+    
+    def set_position(self, c):
+        self.center = c
+        return self
+    
+    def set_radius(self, r):
+        self.radius = r
+        self.R = r ** 2.0
+        return self
+    
+    def set_color(self, c):
+        self.color = c
+        return self
     
     def get_color(self, point):
         """Returns color of body at given point."""
@@ -29,9 +36,19 @@ class Sphere(Body):
         """Returns normal vector of body at given point."""
         return (point - self.center).norm()
     
+    def set_reflectivity(self, r):
+        self._r = max(0.0,min(1.0,r))
+        return self
+    
     def reflectivity(self, point):
         """Returns percentage of brightness due to specular reflection."""
-        return 0.2
+        return self._r
+    
+    def __init__(self, center, radius, color):
+        self.set_position(center)
+        self.set_radius(radius)
+        self.set_color(color)
+        self.set_reflectivity(0.2)
     
     # Intersection of ray with a sphere boils down to the solutions to a 
     # quadratic vector equation.
