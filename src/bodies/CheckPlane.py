@@ -3,6 +3,7 @@ from raytrace.src.Vector import Vector
 from raytrace.src.Ray import Ray
 from raytrace.src.Color import Color
 from raytrace.src.Body import Body
+from raytrace.src.bodies.Plane import Plane
 
 def floor(x):
     if x < 0:
@@ -10,7 +11,7 @@ def floor(x):
     else:
         return int(x)
 
-class CheckedPlane(Plane):
+class CheckPlane(Plane):
     
     def set_colors(self, c1, c2):
         self.c1 = c1
@@ -18,7 +19,7 @@ class CheckedPlane(Plane):
         return self
     
     def set_orientation(self, orientation):
-        self.oX = (orientation - self._origin)norm()
+        self.oX = (orientation - self._origin).norm()
         self.oY = self._normal.cross(self.oX).norm()
         return self
     

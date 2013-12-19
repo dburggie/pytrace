@@ -3,6 +3,7 @@ from raytrace import Ray
 from raytrace import Sphere
 from raytrace import hmSphere
 from raytrace import Plane
+from raytrace import CheckPlane
 from raytrace import Sky
 from raytrace import World
 from raytrace import Color
@@ -16,7 +17,7 @@ height = width
 s = hmSphere(Vector(0.0,1.0,0.0), 1.0,
         Color(0.001,0.99,0.25),
         Vector(10.0,1.0,0.0))
-p = Plane(Vector(0.0,1.0,0.0), Vector(0.0,0.0,0.0), Color(0.8,0.1,0.1))
+p = CheckPlane()
 
 
 
