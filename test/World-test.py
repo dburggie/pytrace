@@ -8,9 +8,11 @@ from raytrace import Sky
 from raytrace import World
 from raytrace import Color
 from raytrace import Image
+from raytrace.src.rand import rand
+from time import time
 
-filename = 'sample-06.png'
-width = 256
+filename = 'sample-09.png'
+width = 400
 height = width
 
 
@@ -37,14 +39,23 @@ c_y = c_up.dup().scale(-1 * c_height / height)
 
 ray = Ray()
 image = Image(width, height)
-
+color = Color()
+loops_per_pixel = 16
+t_0 = time()
 for y in range(height):
-    print 'scanline', y, 'of', height,
     for x in range(width):
-        ray.set_origin(camera.dup())
-        ray.set_direction(c_origin.dup().add(c_x, x).add(c_y, y))
-        image.set_pixel(x,y,w.sample(ray))
-    print 'done'
+        color.set_rgb(0.0,0.0,0.0)
+        for k in range(loops_per_pixel):
+            ray.set_origin(camera.dup().delta(0.01))
+            ray.set_direction(c_origin.dup().add(c_x, x + rand()).add(c_y, y + rand()))
+            color = color + w.sample(ray)
+        color.dim(1.0/loops_per_pixel)
+        image.set_pixel(x,y,color.dup())
+    print 'scanline', y, 'done'
+    t_1 = time()
+    print '    time: {:}'.format(t_1 - t_0)
+    print '    left: ~{:}'.format((t_1 - t_0) * (height - 1 - y))
+    t_0 = t_1
 
 print 'encoding...'
 image.toPNG().write(filename)

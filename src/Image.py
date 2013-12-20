@@ -16,7 +16,7 @@ class Image(Png):
             self.scanlines.append([ Color() for i in range(width) ])
     
     def set_pixel(self, x, y, color):
-        self.scanlines[y][x] = color
+        self.scanlines[y][x].copy(color)
         return self
     
     def get_pixel(self, x, y):

@@ -30,6 +30,14 @@ class Color:
                 min(int(self.g * 256),255),
                 min(int(self.b * 256),255)]
     
+    def avg(self, color, n):
+        a = (n - 1.0) / n
+        b = 1.0 / n
+        self.r = self.r * a + color.r * b
+        self.g = self.g * a + color.g * b
+        self.b = self.b * a + color.g * b
+        return self
+    
     def gamma(self, gamma):
         self.r **= gamma
         self.g **= gamma

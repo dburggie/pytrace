@@ -6,6 +6,7 @@ from bodies import Sphere
 from bodies import hmSphere
 
 from Body import Body
+from Camera import Camera
 from Color import Color
 from Image import Image
 from Interface import Interface
