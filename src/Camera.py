@@ -13,6 +13,7 @@ class Camera:
     
     def set_focus(self, v):
         self.focus = v.norm()
+        self.d = self.focus - self.o
         return self
     
     def set_orientation(self, up):
@@ -23,7 +24,6 @@ class Camera:
     def set_window(self, x, y):
         self.width = x
         self.height = y
-        self.d = self.focus.dup()
         self.d.add(self.up, y / 2.0)
         self.d.add(self.right, x / (-2.0))
         return self
