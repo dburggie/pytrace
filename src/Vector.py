@@ -13,7 +13,7 @@ class Vector:
     
     def length(self):
         """Calculates vector length."""
-        return self.dot(self) ** 0.5
+        return self.dot(self)# ** 0.5
     
     def __init__(self, x = 0.0, y = 1.0, z = 0.0):
         """Initialize vector with x,y,z coordinates."""
@@ -69,14 +69,16 @@ class Vector:
     
     def norm(self):
         """Normalize vector to length 1."""
-        l = self.length()
-        if abs(l) <  bounds.very_small:
-            return self # why did you normalize a zero vector?
-        while abs(l - 1.0) > bounds.small:
-            self.x /= l
-            self.y /= l
-            self.z /= l
-            l = self.length()
+#        l = (self.x * self.x + self.y * self.y + self.z * self.z ) ** 0.5
+        l = (self.x * self.x + self.y * self.y + self.z * self.z ) ** -0.5
+        if l <  bounds.very_small:
+            raise self # why did you normalize a zero vector?
+#        self.x /= l
+#        self.y /= l
+#        self.z /= l
+        self.x *= l
+        self.y *= l
+        self.z *= l
         return self
     
     def cross(self, vector):
