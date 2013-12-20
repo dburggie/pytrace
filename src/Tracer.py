@@ -46,9 +46,11 @@ class Tracer:
         self._drawn = True
         return self
     
-    def write(self, filename = _default_filename):
+    def write(self, filename = _default_filename, gamma = None):
         if not self._drawn:
             raise self.image
+        if not gamma == None:
+            self.image.gamma(gamma)
         print 'encoding as {}...'.format(filename),
         self.image.toPNG().write(filename)
         print '        ALL DONE!'

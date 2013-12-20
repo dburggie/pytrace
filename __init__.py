@@ -8,6 +8,7 @@ from src import Sky
 
 from src import Plane
 from src import CheckPlane
+from src import CheckCircle
 from src import Sphere
 from src import hmSphere
 

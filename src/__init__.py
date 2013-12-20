@@ -2,6 +2,7 @@ import bounds
 
 from bodies import Plane
 from bodies import CheckPlane
+from bodies import CheckCircle
 from bodies import Sphere
 from bodies import hmSphere
 
