@@ -12,18 +12,19 @@ class Camera:
         return self
     
     def set_focus(self, v):
+        self.forward = (v - self.o).norm()
         self.focus = v.norm()
-        self.d = self.focus - self.o
         return self
     
     def set_orientation(self, up):
-        self.right = self.focus.cross(up).norm()
-        self.up = self.right.cross(self.focus).norm()
+        self.right = self.forward.cross(up).norm()
+        self.up = self.right.cross(self.forward).norm()
         return self
     
     def set_window(self, x, y):
         self.width = x
         self.height = y
+        self.d = self.focus.dup()
         self.d.add(self.up, y / 2.0)
         self.d.add(self.right, x / (-2.0))
         return self
@@ -41,7 +42,10 @@ class Camera:
     
     def get_ray(self, x, y):
         o = self.o.dup()
-        d = self.d.dup().add(self.xstep, x + rand()).add(self.ystep, y + rand())
+        d = self.d.dup()
+        d.add(self.xstep, x + rand())
+        d.add(self.ystep, y + rand())
+        d.add(self.o, -1.0).norm()
         return Ray(o, d)
     
     def __init__(self, origin = Vector(0.0,1.0,0.0),
