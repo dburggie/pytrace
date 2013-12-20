@@ -12,6 +12,7 @@ from Image import Image
 from Interface import Interface
 from Ray import Ray
 from Sky import Sky
+from Tracer import Tracer
 from Vector import Vector
 from World import World
 
