@@ -3,14 +3,34 @@ Note: this is version 0.0.1 of this module and currently does not run.
 This python module is for the rendering of a simulated 3D world by raytracing.
 The dependencies for this module are outlined at the bottom of this readme.
 
-Use of this module flows as follows. Instantiate one or many 3D objects that
-are children of the included 'Body' class (the body class is filled with
-virtual members providing a common interface for its children and is easily
-extended). Instantiate a 'World' object and feed it the bodies instantiated
-above with the 'add_body()' method. Setup a lightsource direction, a color for
-the sky, a point-of-view position, direction, and orientation, and a field of
-view center, width, and height. Finally use the 'render()' method of your
-'World' object to render the image.
+Use of this module flows as follows.
+
+    * import the raytrace module
+    * instantiate a Sky object (parameters are vector to 'sun' and color of sky)
+    * instantiate some number of Body objects
+    * instantiate World object
+    * add bodies to world
+    * instantiate a Camera object
+        * position
+        * focal point
+        * width in units
+        * height in units
+        * orientation vector (which way is up)
+    * change pixels per unit with Camera's 'set_ppu()' method (default 100)
+    * instantiate a Tracer object
+        * world object
+        * camera object
+    * use Tracer.draw(n) to draw image
+    * use Tracer.write(filename) to output to file
+
+########## Example Code ##########
+import raytrace
+p = raytrace.CheckPlane
+w = raytrace.World([p], raytrace.Sky( raytrace.Vector(0.0,1.0,10.0))
+c = raytrace.Camera(Vector(0.0,1.0,0.0), Vector(0.0,0.0,1.0))
+t = raytrace.Tracer(w, c)
+t.draw().write()
+########## End  Example ##########
 
 DEPENDENCIES:
     pypng -- for creation of output image.
