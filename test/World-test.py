@@ -1,14 +1,7 @@
-from raytrace import Vector
-from raytrace import Ray
-from raytrace import Sphere
-from raytrace import hmSphere
-from raytrace import Plane
-from raytrace import CheckPlane
-from raytrace import Sky
-from raytrace import World
-from raytrace import Color
-from raytrace import Image
-from raytrace.src.rand import rand
+from py3D import Vector, Ray, Sphere, hmSphere, Plane, CheckPlane, Color
+from pytrace import Sky, World
+from pytrace.src.Image import Image
+from pytrace.src.rand import rand
 from time import time
 
 filename = 'sample-09.png'

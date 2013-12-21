@@ -1,8 +1,5 @@
-from raytrace.src.Tracer import Tracer
-from raytrace.src.Sky import Sky
-from raytrace.src.World import World
-from raytrace.src.Camera import Camera
-from raytrace.src.Vector import Vector
+from pytrace import Tracer, Sky, World, Camera
+from py3D import Vector
 import cProfile
 
 def run():

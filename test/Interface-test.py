@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 
 from py3D import Vector, Ray, Body, Color
-from pytrace import Interface
+from pytrace.src.Interface import Interface
 import cProfile
 
 class bodystub(Body):
