@@ -1,6 +1,4 @@
-from Vector import Vector
-from Ray import Ray
-from Body import Body
+from py3D import Vector, Ray, Body
 
 class Interface:
     

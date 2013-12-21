@@ -5,7 +5,7 @@ The dependencies for this module are outlined at the bottom of this readme.
 
 Use of this module flows as follows.
 
-    * import the raytrace module
+    * import the pytrace module (and the py3D module)
     * instantiate a Sky object (parameters are vector to 'sun' and color of sky)
     * instantiate some number of Body objects
     * instantiate World object
@@ -33,5 +33,6 @@ t.draw().write()
 ########## End  Example ##########
 
 DEPENDENCIES:
+    py3D  -- for instantiation of bodies
     pypng -- for creation of output image.
     pybin -- dependency of pypng

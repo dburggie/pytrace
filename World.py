@@ -1,10 +1,7 @@
 import bounds
-from Color import Color
-from Vector import Vector
-from Ray import Ray
-from Body import Body
 from Sky import Sky
 from Interface import Interface
+from py3D import Body, Color, Ray, Vector
 
 
 class World:

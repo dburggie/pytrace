@@ -1,5 +1,4 @@
-from Vector import Vector
-from Ray import Ray
+from py3D import Vector, Ray
 from rand import rand
 
 _default_ppu = 100
@@ -13,7 +12,7 @@ class Camera:
     
     def set_focus(self, v):
         self.forward = (v - self.o).norm()
-        self.focus = v.norm()
+        self.focus = v
         return self
     
     def set_orientation(self, up):

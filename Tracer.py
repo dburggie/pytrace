@@ -1,8 +1,7 @@
-from World import World
 from Camera import Camera
-from Color import Color
-from Vector import Vector
 from Image import Image
+from World import World
+from py3D import Color, Vector
 
 _default_filename = 'trace.png'
 
@@ -36,13 +35,12 @@ class Tracer:
         self.image = Image(width, height)
         c = Color()
         for y in range(height):
-            print 'drawing line', y + 1, 'of', height,
+            print 'drawing line', y + 1, 'of', height
             for x in range(width):
                 c.set_rgb(0.0,0.0,0.0)
                 for p in range(passes):
                     c = c + self.world.sample(self.camera.get_ray(x,y))
                 self.image.set_pixel(x,y,c.dim(1.0 / passes))
-            print c.p()
         self._drawn = True
         return self
     
@@ -51,7 +49,7 @@ class Tracer:
             raise self.image
         if not gamma == None:
             self.image.gamma(gamma)
-        print 'encoding as {}...'.format(filename),
+        print 'encoding as {}...'.format(filename)
         self.image.toPNG().write(filename)
         print '        ALL DONE!'
         return self

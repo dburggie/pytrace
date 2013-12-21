@@ -1,4 +1,4 @@
-from Color import Color
+from py3D import Color
 from pypng import Png
 
 class Image(Png):

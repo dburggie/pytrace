@@ -1,6 +1,4 @@
-from Vector import Vector
-from Color import Color
-
+from py3D import Vector, Color
 
 class Sky:
     """Class that describes the sky."""
