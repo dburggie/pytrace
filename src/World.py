@@ -123,8 +123,6 @@ class World:
         #           if L < 0 or in shadow: L = B
         #           (1-S)*L*C + S*R
         
-        color = i._color.dup()
-        
         sp = i._body.reflectivity(i._poi)
         dp = 1.0 - sp
         L = self.shade(i)

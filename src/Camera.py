@@ -6,15 +6,6 @@ _default_ppu = 100
 class Camera:
     
     
-    def set_position(self, v):
-        self.o = v
-        return self
-    
-    def set_focus(self, v):
-        self.forward = (v - self.o).norm()
-        self.focus = v
-        return self
-    
     def set_position_delta(self, d):
         if d == None:
             self._delta = None
@@ -48,6 +39,20 @@ class Camera:
         self.set_ppu(self.ppu)
         return self
     
+    def set_focus(self, v):
+        self.forward = (v - self.o).norm()
+        self.focus = v
+        if self._init:
+            self._reset
+        return self
+    
+    def set_position(self, v):
+        self.o = v
+        if self._init:
+            self.set_focus(self.focus)
+            self._reset
+        return self
+    
     def get_ray(self, x, y):
         o = self.o.dup()
         if self._delta != None:
@@ -58,19 +63,25 @@ class Camera:
         d.add(self.o, -1.0).norm()
         return Ray(o, d)
     
+    def dup(self):
+        c = Camera(self.o, self.focus, self.width, self.height, self.up)
+        c.set_ppu(self.ppu)
+        c.set_position_delta(self._delta)
+        return c
+    
     def __init__(self, origin = Vector(0.0,1.0,0.0),
             focus = Vector(0.0,0.0,1.0),
             width = 2.0, height = 2.0,
             up = Vector(0.0,1.0,0.0) ):
         """Instantiates new object."""
-        
-        self.r = Ray()
-        self.set_position(origin)
+        self._init = False
+        self.set_position( origin )
         self.set_focus(focus)
         self.set_orientation(up)
         self.set_window(width, height)
         self.set_ppu()
         self.set_position_delta(None)
+        self._init = True
     
     
     
