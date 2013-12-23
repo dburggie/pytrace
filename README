@@ -1,4 +1,3 @@
-Note: this is version 0.0.1 of this module and currently does not run.
 
 This python module is for the rendering of a simulated 3D world by raytracing.
 The dependencies for this module are outlined at the bottom of this readme.
@@ -7,9 +6,9 @@ Use of this module flows as follows.
 
     * import the pytrace module (and the py3D module)
     * instantiate a Sky object (parameters are vector to 'sun' and color of sky)
-    * instantiate some number of Body objects
+    * instantiate some number of Body objects from py3D module
     * instantiate World object
-    * add bodies to world
+    * add bodies to world ('add_body() method')
     * instantiate a Camera object
         * position
         * focal point

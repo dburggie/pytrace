@@ -15,6 +15,15 @@ class Camera:
         self.focus = v
         return self
     
+    def set_position_delta(self, d):
+        if d == None:
+            self._delta = None
+            return self
+        if isinstance(d, float):
+            self._delta = d
+            return self
+        raise d
+    
     def set_orientation(self, up):
         self.right = self.forward.cross(up).norm()
         self.up = self.right.cross(self.forward).norm()
@@ -41,6 +50,8 @@ class Camera:
     
     def get_ray(self, x, y):
         o = self.o.dup()
+        if self._delta != None:
+            o.delta(self._delta)
         d = self.d.dup()
         d.add(self.xstep, x + rand())
         d.add(self.ystep, y + rand())
@@ -59,6 +70,7 @@ class Camera:
         self.set_orientation(up)
         self.set_window(width, height)
         self.set_ppu()
+        self.set_position_delta(None)
     
     
     
