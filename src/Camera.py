@@ -40,31 +40,31 @@ class Camera:
         return self
     
     def set_focus(self, v):
-        self.forward = (v - self.o).norm()
+        self.forward = (v - self._o).norm()
         self.focus = v
         if self._init:
             self._reset
         return self
     
     def set_position(self, v):
-        self.o = v
+        self._o = v
         if self._init:
             self.set_focus(self.focus)
             self._reset
         return self
     
     def get_ray(self, x, y):
-        o = self.o.dup()
+        o = self._o.dup()
         if self._delta != None:
             o.delta(self._delta)
         d = self.d.dup()
         d.add(self.xstep, x + rand())
         d.add(self.ystep, y + rand())
-        d.add(self.o, -1.0).norm()
+        d.add(self._o, -1.0).norm()
         return Ray(o, d)
     
     def dup(self):
-        c = Camera(self.o, self.focus, self.width, self.height, self.up)
+        c = Camera(self._o, self.focus, self.width, self.height, self.up)
         c.set_ppu(self.ppu)
         c.set_position_delta(self._delta)
         return c

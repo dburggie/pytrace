@@ -3,33 +3,35 @@ from pypng import Png
 
 class Image(Png):
     
-    width = 0
-    height = 0
-    scanlines = []
+    _i_width = 0
+    _i_height = 0
+    _scanlines = []
     
     def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        Png.__init__(self,width,height)
-        self.scanlines = []
+        Png.__init__(self, width, height)
+        self._i_width = width
+        self._i_height = height
+        self._scanlines = []
         for i in range(height):
-            self.scanlines.append([ Color() for i in range(width) ])
+            self._scanlines.append([ Color() for k in range(width) ])
     
     def set_pixel(self, x, y, color):
-        self.scanlines[y][x].copy(color)
+        self._scanlines[y][x].copy(color)
         return self
     
     def get_pixel(self, x, y):
-        return self.scanlines[y][x]
+        return self._scanlines[y][x]
     
     def gamma(self, gfactor):
-        for lines in self.scanlines:
+        for lines in self._scanlines:
             for pixels in lines:
                 pixels.gamma(gfactor)
         return self
     
     def toPNG(self):
-        for y in range(self.height):
-            for x in range(self.width):
+        
+        for y in range(self._i_height):
+            for x in range(self._i_width):
+                print x,y,self.get_pixel(x,y).p()
                 Png.set_pixel(self,x,y,self.get_pixel(x,y).p())
         return self
