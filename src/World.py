@@ -8,51 +8,51 @@ class World:
     """This class holds body/camera/view information and performs raytrace."""
     
     
-    bodies = []
-    sky = Color()
-    interface = Interface()
-    light = Vector().norm()
-    base_brightness = 0.2
+    _bodies = []
+    _sky = Color()
+    _interface = Interface()
+    _light = Vector().norm()
+    _base_brightness = 0.2
     
     
     
     def __init__(self, bodies = [], sky = Sky()):
-        self.bodies = bodies
-        self.sky = sky
-        self.light = sky.get_light()
+        self._bodies = bodies
+        self._sky = sky
+        self._light = sky.get_light()
         interface = Interface()
-        self.base_brightness = 0.2
+        self._base_brightness = 0.2
     
     
     
     def add_body(self, body):
-        self.bodies.append(body)
+        self._bodies.append(body)
         return self
     
     
     
     def set_sky(self, sky):
-        self.sky = sky
+        self._sky = sky
         return self
     
     
     
     def get_sky(self, ray):
-        return self.sky.get_color(ray)
+        return self._sky.get_color(ray)
     
     def get_light(self):
-        return self.light.dup()
+        return self._light.dup()
     
     def set_base_brightness(self, b):
-        self.base_brightness = b
+        self._base_brightness = b
         return self
     
     def trace(self, ray, last_hit = None):
         """Finds first interaction of a ray within the world."""
         
-        self.interface.reset()
+        self._interface.reset()
         
-        for bodies in self.bodies:
+        for bodies in self._bodies:
         
             # check for intersection of ray with body
             distance = bodies.intersection(ray)
@@ -64,28 +64,28 @@ class World:
                 continue
             
             # if we've got a hit, register it if it's closer
-            self.interface.hit(bodies, distance)
+            self._interface.hit(bodies, distance)
         # end for
         
         # register the rest of our interface
-        self.interface.register_hit(ray)
+        self._interface.register_hit(ray)
         
-        return self.interface
+        return self._interface
     
     
     
     def shade(self, interface):
         """Detects amount of illumination at point."""
         ray = Ray( interface._poi, self.get_light() )
-        lambertian = self.light.dot(interface._normal)
-        if lambertian < self.base_brightness:
-            return self.base_brightness
-        for bodies in self.bodies:
+        lambertian = self._light.dot(interface._normal)
+        if lambertian < self._base_brightness:
+            return self._base_brightness
+        for bodies in self._bodies:
             distance = bodies.intersection(ray)
             if distance < 0.0:
                 continue
             if bodies != interface._body or distance > bounds.too_small:
-                lambertian = self.base_brightness
+                lambertian = self._base_brightness
                 break
         return lambertian
     

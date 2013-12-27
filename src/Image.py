@@ -32,6 +32,5 @@ class Image(Png):
         
         for y in range(self._i_height):
             for x in range(self._i_width):
-                print x,y,self.get_pixel(x,y).p()
                 Png.set_pixel(self,x,y,self.get_pixel(x,y).p())
         return self
