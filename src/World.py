@@ -2,6 +2,7 @@ import bounds
 from Sky import Sky
 from Interface import Interface
 from py3D import Body, Color, Ray, Vector
+from refract import sinSnell, cosSnell, fresnel
 
 
 class World:
@@ -78,20 +79,25 @@ class World:
         """Detects amount of illumination at point."""
         ray = Ray( interface._poi, self.get_light() )
         lambertian = self._light.dot(interface._normal)
+        
         if lambertian < self._base_brightness:
             return self._base_brightness
+        
         for bodies in self._bodies:
             distance = bodies.intersection(ray)
             if distance < 0.0:
                 continue
             if bodies != interface._body or distance > bounds.too_small:
-                lambertian = self._base_brightness
-                break
+                lambertian *= 1 - bodies.opacity
+                if lambertian < self._base_brightness:
+                    lambertian = self._base_brightness
+                    break
+        
         return lambertian
     
     
     
-    def sample(self, ray, last_hit = None, depth = 0):
+    def sample(self, ray, index = 1.0, depth = 0, last_hit = None):
         """Recursively traces ray within world."""\
         
         # check trace depth boundary
@@ -105,30 +111,28 @@ class World:
         if i._body == None:
             return self.get_sky(ray)
         
-        # handling color of pixel:
-        #   we need to adjust the color based on:
-        #       1) lambertian factor: angle of surface to light source
-        #       2) surface has direct line of sight to light source (shadow)
-        #       3) specular reflection and refraction
-        #   thus a formula:
-        #       Parameters:
-        #           B: base brightness
-        #           S: specularity of interface
-        #               (1-S) is thus power of diffuse brightness
-        #           L: lambertian factor
-        #           R: color in reflected direction
-        #           C: color at this interface
-        #       Formula:
-        #           L = Normal.dot(Light)
-        #           if L < 0 or in shadow: L = B
-        #           (1-S)*L*C + S*R
+        # here's what happens at an interface:
+        #   find out specular power using fresnel function Ps
+        #   use specular power to find transmissive power Pt
+        #   get body's opacity O
+        #   if 0 != 1.0: calculate refraction ray
+        #       color = (1 - O) * Pt * sample(refraction)
+        #   color = color + shade * O * Pt * bodycolor
+        #   color = color + Ps * sample(reflection)
         
-        sp = i._body.reflectivity(i._poi)
-        dp = 1.0 - sp
+        cos_i = abs(ray.d.dot(i._normal))
+        Ps = fresnel(cos_i, index, i._index)
+        Pt = 1.0 - Ps
+        color = Color(0.0,0.0,0.0)
+        O = i._opacity
+        if O < 1.0:
+            rRay = ray.dup()
+            rRay.refract(i._poi, i._normal, sinSnell(cos_i, index, i._index))
+            color = sample(rRay, i._index, depth + 1, i._body).dim(1-O).dim(Pt)
         L = self.shade(i)
-        color = i._color.dim(L).dim(dp)
-        return color + self.sample(ray.reflect(i._poi, i._normal), 
-                i._body, depth + 1).dim(sp)
+        color = color + i._color.dim(L).dim(Pt).dim(O)
+        return color + self.sample(ray.reflect(i._poi, i._normal), index,
+                depth + 1, i._body).dim(Ps)
     
     
     
