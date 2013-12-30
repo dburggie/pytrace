@@ -2,9 +2,9 @@ import py3D
 import pytrace
 from py3D.bodies.TruncSphere import TruncSphere
 
-filename = 'ft-03.png'
-passes = 16
-ppu = 100
+filename = 'ft-05.png'
+passes = 4
+ppu = 50
 delta = 0.01
 V = py3D.Vector
 
@@ -33,7 +33,7 @@ mirror.set_reflectivity(0.7)
 ball = py3D.Sphere(V(1.0,1.0,0.0), 1.0, py3D.Color(0.1,0.8,0.2))
 
 # setup plane
-plane = py3D.CheckCircle()
+plane = py3D.CheckCircle(5.0).set_reflectivity(0.0)
 
 # setup World
 world = pytrace.World([mirror, ball, plane], sky)

@@ -88,10 +88,8 @@ class World:
             if distance < 0.0:
                 continue
             if bodies != interface._body or distance > bounds.too_small:
-                lambertian *= 1 - bodies.opacity
-                if lambertian < self._base_brightness:
-                    lambertian = self._base_brightness
-                    break
+                lambertian = self._base_brightness
+                break
         
         return lambertian
     
@@ -121,16 +119,13 @@ class World:
         #   color = color + Ps * sample(reflection)
         
         cos_i = abs(ray.d.dot(i._normal))
-        Ps = fresnel(cos_i, index, i._index)
+        R = i._body.reflectivity(i._poi)
+        D = 1 - R
+        Ps = R + D * (1 - cos_i) ** 2
         Pt = 1.0 - Ps
-        color = Color(0.0,0.0,0.0)
-        O = i._opacity
-        if O < 1.0:
-            rRay = ray.dup()
-            rRay.refract(i._poi, i._normal, sinSnell(cos_i, index, i._index))
-            color = sample(rRay, i._index, depth + 1, i._body).dim(1-O).dim(Pt)
+        
         L = self.shade(i)
-        color = color + i._color.dim(L).dim(Pt).dim(O)
+        color = i._color.dim(L).dim(Pt)
         return color + self.sample(ray.reflect(i._poi, i._normal), index,
                 depth + 1, i._body).dim(Ps)
     
