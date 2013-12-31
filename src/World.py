@@ -109,25 +109,31 @@ class World:
         if i._body == None:
             return self.get_sky(ray)
         
-        # here's what happens at an interface:
-        #   find out specular power using fresnel function Ps
-        #   use specular power to find transmissive power Pt
-        #   get body's opacity O
-        #   if 0 != 1.0: calculate refraction ray
-        #       color = (1 - O) * Pt * sample(refraction)
-        #   color = color + shade * O * Pt * bodycolor
-        #   color = color + Ps * sample(reflection)
-        
-        cos_i = abs(ray.d.dot(i._normal))
-        R = i._body.reflectivity(i._poi)
-        D = 1 - R
-        Ps = R + D * (1 - cos_i) ** 2
-        Pt = 1.0 - Ps
+        # handle matte and specular differently:
+        #   matte:
+        #       find brightness as usual with cosines to light source
+        #       find cosine of reflected ray to light source
+        #       raise the highlight cosine to characteristic surface power
+        #       take color to white as highlight value goes to one
         
         L = self.shade(i)
-        color = i._color.dim(L).dim(Pt)
-        return color + self.sample(ray.reflect(i._poi, i._normal), index,
-                depth + 1, i._body).dim(Ps)
+        
+        if i._body.is_matte:
+            ray.reflect(i._poi, i._normal)
+            highlight = max(0.0,ray.d.dot(self.get_light()))
+            highlight **= i._body.highlight
+            return i._color.dim(L).gamma(1 - highlight)
+        else:
+            
+            cos_i = abs(ray.d.dot(i._normal))
+            R = i._body.reflectivity(i._poi)
+            D = 1 - R
+            Ps = R + D * (1 - cos_i) ** 2
+            Pt = 1.0 - Ps
+            
+            color = i._color.dim(L).dim(Pt)
+            return color + self.sample(ray.reflect(i._poi, i._normal), index,
+                    depth + 1, i._body).dim(Ps)
     
     
     

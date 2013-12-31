@@ -2,9 +2,9 @@ import py3D
 import pytrace
 from py3D.bodies.TruncSphere import TruncSphere
 
-filename = 'ft-05.png'
-passes = 4
-ppu = 50
+filename = 'ft-06.png'
+passes = 32
+ppu = 200
 delta = 0.01
 V = py3D.Vector
 
