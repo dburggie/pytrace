@@ -79,20 +79,30 @@ class World:
         ray = Ray( interface.poi, self.get_light() )
         lambertian = self._light.dot(interface.normal)
         
-        if lambertian < self._base_brightness:
-            return self._base_brightness
+        if lambertian < 0.0:
+            return lambertian
         
         for bodies in self._bodies:
             distance = bodies.intersection(ray)
             if distance < 0.0:
                 continue
             if bodies != interface.body or distance > bounds.too_small:
-                lambertian = self._base_brightness
+                lambertian = -1.0
                 break
         
         return lambertian
     
     
+    
+    def highlight(self, lambertian, ray, interface):
+            
+            if lambertian < 0.0:
+                return interface.color.dim(self._base_brightness)
+            lambertian = max(lambertian, self._base_brightness)
+            ray.reflect(i.poi, i.normal)
+            highlight = max(0.0,ray.d.dot(self.get_light()))
+            highlight **= i.exp
+            return i.color.dim(L).gamma(1 - highlight)
     
     def sample(self, ray, index = 1.0, depth = 0, last_hit = None):
         """Recursively traces ray within world."""
@@ -113,14 +123,12 @@ class World:
         
         # add specular highlight if matte surface
         if i.matte:
-            ray.reflect(i.poi, i.normal)
-            highlight = max(0.0,ray.d.dot(self.get_light()))
-            highlight **= i.exp
-            return i.color.dim(L).gamma(1 - highlight)
+            return self.highlight(L, ray, i)
         
         # if not matte, we do specular reflection
         else:
-            
+            if L < self._base_brightness:
+                L = self._base_brightness
             cos_i = abs(ray.d.dot(i.normal))
             R = i.body.reflectivity(i.poi)
             D = 1 - R
