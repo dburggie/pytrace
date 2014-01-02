@@ -77,8 +77,8 @@ class World:
     
     def shade(self, interface):
         """Detects amount of illumination at point."""
-        ray = Ray( interface._poi, self.get_light() )
-        lambertian = self._light.dot(interface._normal)
+        ray = Ray( interface.poi, self.get_light() )
+        lambertian = self._light.dot(interface.normal)
         
         if lambertian < self._base_brightness:
             return self._base_brightness
@@ -87,7 +87,7 @@ class World:
             distance = bodies.intersection(ray)
             if distance < 0.0:
                 continue
-            if bodies != interface._body or distance > bounds.too_small:
+            if bodies != interface.body or distance > bounds.too_small:
                 lambertian = self._base_brightness
                 break
         
@@ -96,7 +96,7 @@ class World:
     
     
     def sample(self, ray, index = 1.0, depth = 0, last_hit = None):
-        """Recursively traces ray within world."""\
+        """Recursively traces ray within world."""
         
         # check trace depth boundary
         if depth == bounds.max_depth:
@@ -106,34 +106,31 @@ class World:
         i = self.trace(ray, last_hit)
         
         # detect hitting the sky
-        if i._body == None:
+        if i.body == None:
             return self.get_sky(ray)
         
-        # handle matte and specular differently:
-        #   matte:
-        #       find brightness as usual with cosines to light source
-        #       find cosine of reflected ray to light source
-        #       raise the highlight cosine to characteristic surface power
-        #       take color to white as highlight value goes to one
-        
+        # shade point
         L = self.shade(i)
         
-        if i._body.is_matte:
-            ray.reflect(i._poi, i._normal)
+        # add specular highlight if matte surface
+        if i.matte:
+            ray.reflect(i.poi, i.normal)
             highlight = max(0.0,ray.d.dot(self.get_light()))
-            highlight **= i._body.highlight
-            return i._color.dim(L).gamma(1 - highlight)
+            highlight **= i.exp
+            return i.color.dim(L).gamma(1 - highlight)
+        
+        # if not matte, we do specular reflection
         else:
             
-            cos_i = abs(ray.d.dot(i._normal))
-            R = i._body.reflectivity(i._poi)
+            cos_i = abs(ray.d.dot(i.normal))
+            R = i.body.reflectivity(i.poi)
             D = 1 - R
-            Ps = R + D * (1 - cos_i) ** 2
+            Ps = R + D * ( (1 - cos_i) ** i.exp )
             Pt = 1.0 - Ps
             
-            color = i._color.dim(L).dim(Pt)
-            return color + self.sample(ray.reflect(i._poi, i._normal), index,
-                    depth + 1, i._body).dim(Ps)
+            color = i.color.dim(L).dim(Pt)
+            return color + self.sample(ray.reflect(i.poi, i.normal), index,
+                    depth + 1, i.body).dim(Ps)
     
     
     

@@ -19,55 +19,57 @@ class Interface:
             normal = None,
             color = None):
         
-        self._distance = distance
-        self._poi = poi
-        self._body = body
-        self._normal = normal
-        self._color = color
+        self.distance = distance
+        self.poi = poi
+        self.body = body
+        self.normal = normal
+        self.color = color
+        if body != None:
+            self.matte = body.is_matte
+            self.exp = body.exp
+        else:
+            self.matte = None
+            self.exp = None
     
     
     
     def dup(self):
         return Interface(
-                self._distance,
-                self._poi,
-                self._body,
-                self._normal,
-                self._color)
+                self.distance,
+                self.poi,
+                self.body,
+                self.normal,
+                self.color)
     
     
     
     def reset(self):
-        self._distance = None
-        self._poi = None
-        self._body = None
-        self._normal = None
-        self._color = None
+        self.distance = None
+        self.poi = None
+        self.body = None
+        self.normal = None
+        self.color = None
+        self.exp = None
+        self.matte = None
         return self
     
     
     
     def hit(self, body, distance):
-        if self._body == None or distance < self._distance:
-            self._distance = distance
-            self._body = body
+        if self.body == None or distance < self.distance:
+            self.distance = distance
+            self.body = body
         return self
     
     
     
     def register_hit(self, ray):
-        if self._body != None and self._distance > 0.0:
-            self._poi = ray.follow(self._distance)
-            self._normal = self._body.normal(self._poi)
-            self._color = self._body.get_color(self._poi)
-#            print "registered a hit at distance", self._distance
-#            print "    hit details:"
-#            print "        poi:    ", self._poi.p()
-#            print "        normal: ", self._normal.p()
-#            print "        color:  ", self._color.p()
-#            print "        body:   ", self._body.p()
-#        else:
-#            print "no hit registered: hit the sky."
+        if self.body != None and self.distance > 0.0:
+            self.poi = ray.follow(self.distance)
+            self.normal = self.body.normal(self.poi)
+            self.color = self.body.get_color(self.poi)
+            self.exp = self.body.exp
+            self.matte = self.body.is_matte
         return self
     
     
