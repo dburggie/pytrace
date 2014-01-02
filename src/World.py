@@ -1,7 +1,6 @@
 import bounds
-from Sky import Sky
 from Interface import Interface
-from py3D import Body, Color, Ray, Vector
+from py3D import Body, Color, Ray, Vector, Sky
 from refract import sinSnell, cosSnell, fresnel
 
 

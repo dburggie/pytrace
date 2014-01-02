@@ -2,7 +2,7 @@ import py3D
 import pytrace
 from py3D.bodies.TruncSphere import TruncSphere
 
-filename = 'ft-07.png'
+filename = 'ft-08.png'
 passes = 1
 ppu = 25.0
 delta = 0.01
@@ -18,7 +18,7 @@ cam.set_ppu(ppu)
 
 # setup sky
 sun = V(3.0,10.0,3.0).norm()
-sky = pytrace.Sky(sun, py3D.Color(0.5,0.5,0.99))
+sky = py3D.skys.Rainbow(sun)
 
 # setup mirror
 m_c = V(-1.0,1.0,0.0)

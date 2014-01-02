@@ -1,5 +1,5 @@
-from pytrace import Tracer, Sky, World, Camera
-from py3D import Vector
+from pytrace import Tracer, World, Camera
+from py3D import Vector, Sky
 import cProfile
 
 def run():

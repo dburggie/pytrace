@@ -1,1 +1,1 @@
-from src import Camera, Sky, Tracer, World, Stereo
+from src import Camera, Tracer, World, Stereo

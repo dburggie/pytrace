@@ -1,7 +1,5 @@
-from py3D import Vector, Ray, Sphere, hmSphere, Plane, CheckPlane, Color
-from pytrace import Sky, World
-from pytrace.src.Image import Image
-from pytrace.src.rand import rand
+from py3D import Vector, Ray, Sphere, hmSphere, Plane, CheckPlane, Color, Sky
+from pytrace import World, Image, rand
 from time import time
 
 filename = 'sample-09.png'
